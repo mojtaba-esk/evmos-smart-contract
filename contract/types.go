@@ -1,4 +1,4 @@
-package store_contracts
+package contract
 
 type CompiledContract struct {
 	ABI  string `json:"abi"`

@@ -22,6 +22,7 @@ var defaultNodeHome = os.ExpandEnv("$HOME/") + ".evmosd"
 
 const EnvPrefix = "EVMOS"
 const AppName = "evmosd"
+const FlagCompiledContractsPath = "compiled-contracts-path"
 
 var rootCmd = &cobra.Command{
 	Use:   "deploy-smart-contract",
@@ -36,6 +37,7 @@ func init() {
 	rootCmd.PersistentFlags().String(cosmosFlags.FlagKeyAlgorithm, string(hd.EthSecp256k1Type), "The algorithm used to generate the keys")
 	rootCmd.PersistentFlags().String(cosmosFlags.FlagNode, "http://localhost:8545", "The evmos node to connect to")
 	rootCmd.PersistentFlags().String(cosmosFlags.FlagChainID, "evmos_9000-1", "The evmos chain id")
+	rootCmd.PersistentFlags().String(FlagCompiledContractsPath, filepath.Join(GetRootPath(), "contracts", "compiled_contracts"), "The path to the compiled contracts in json format")
 }
 
 func Execute() {

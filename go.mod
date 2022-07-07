@@ -3,7 +3,6 @@ module github.com/mojtaba-esk/deploy-smart-contract
 go 1.18
 
 require (
-	github.com/coinbase/rosetta-sdk-go v0.7.0
 	github.com/cosmos/cosmos-sdk v0.45.5
 	github.com/ethereum/go-ethereum v1.10.20
 	github.com/evmos/ethermint v0.17.0

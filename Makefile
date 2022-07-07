@@ -676,7 +676,7 @@ create-contracts-json:
 		solc --combined-json abi,bin $(CONTRACTS_DIR)/$${c}.sol > $(TMP_COMPILED) ;\
 		# solc --abi $(CONTRACTS_DIR)/$${c}.sol -o $(CONTRACTS_DIR)/abi/ ;\
 		# solc --bin $(CONTRACTS_DIR)/$${c}.sol -o $(CONTRACTS_DIR)/bin/ ;\
-		# abigen --bin=$(CONTRACTS_DIR)/bin/$${c}.bin --abi=$(CONTRACTS_DIR)/abi/$${c}.abi --pkg=store --out=$(CONTRACTS_DIR)/store.go ;\
+		# abigen --bin=$(CONTRACTS_DIR)/bin/$${c}.bin --abi=$(CONTRACTS_DIR)/abi/$${c}.abi --pkg=store --out=$(CONTRACTS_DIR)/$${c}.go ;\
 		echo "Formatting JSON..." ;\
 		get_contract=$$(jq '.contracts["$(CONTRACTS_DIR)/'$$c'.sol:'$$c'"]' $(TMP_COMPILED)) ;\
 		add_contract_name=$$(echo $$get_contract | jq '. + { "contractName": "'$$c'" }') ;\
