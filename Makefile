@@ -245,6 +245,21 @@ else
 	@echo "solcjs already installed; skipping..."
 endif
 
+ifeq (, $(shell which solc))
+	@echo "Installing solc..."
+	@snap install solc
+else
+	@echo "solc already installed; skipping..."
+endif
+
+# ifeq (, $(shell which abigen))
+# 	@echo "Installing abigen..."
+# 	@add-apt-repository -y ppa:ethereum/ethereum
+# 	@apt-get install -y ethereum
+# else
+# 	@echo "abigen already installed; skipping..."
+# endif
+
 docs-tools:
 ifeq (, $(shell which yarn))
 	@echo "Installing yarn..."
@@ -641,6 +656,9 @@ contracts-clean:
 	@rm -rf node_modules
 	@rm -rf $(COMPILED_DIR)
 	@rm -rf $(CONTRACTS_DIR)/@openzeppelin
+	@rm -rf $(CONTRACTS_DIR)/bin
+	@rm -rf $(CONTRACTS_DIR)/abi
+	@rm -rf $(CONTRACTS_DIR)/*.go
 
 # Compile, filter out and format contracts into the following format.
 # {
@@ -656,6 +674,9 @@ create-contracts-json:
 		mkdir -p $(TMP) ;\
 		echo "\nCompiling solidity contract $${c}..." ;\
 		solc --combined-json abi,bin $(CONTRACTS_DIR)/$${c}.sol > $(TMP_COMPILED) ;\
+		# solc --abi $(CONTRACTS_DIR)/$${c}.sol -o $(CONTRACTS_DIR)/abi/ ;\
+		# solc --bin $(CONTRACTS_DIR)/$${c}.sol -o $(CONTRACTS_DIR)/bin/ ;\
+		# abigen --bin=$(CONTRACTS_DIR)/bin/$${c}.bin --abi=$(CONTRACTS_DIR)/abi/$${c}.abi --pkg=store --out=$(CONTRACTS_DIR)/store.go ;\
 		echo "Formatting JSON..." ;\
 		get_contract=$$(jq '.contracts["$(CONTRACTS_DIR)/'$$c'.sol:'$$c'"]' $(TMP_COMPILED)) ;\
 		add_contract_name=$$(echo $$get_contract | jq '. + { "contractName": "'$$c'" }') ;\
