@@ -25,7 +25,7 @@ const AppName = "evmosd"
 const FlagCompiledContractsPath = "compiled-contracts-path"
 
 var rootCmd = &cobra.Command{
-	Use:   "deploy-smart-contract",
+	Use:   "evmos-smart-contract",
 	Short: "Deploy a smart contract to evmos",
 }
 

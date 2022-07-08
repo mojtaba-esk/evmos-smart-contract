@@ -1,4 +1,4 @@
 contracts/@openzeppelin/
 .vscode/
 contracts/compiled_contracts/
-deploy-smart-contract
+evmos-smart-contract

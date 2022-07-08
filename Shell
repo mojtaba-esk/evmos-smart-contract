@@ -1,22 +1,22 @@
 
 
-reset && go build . && ./deploy-smart-contract deploy Counter --from mykey --keyring-backend test
-go build . && ./deploy-smart-contract query Counter 0xCdb87C8024258af1Dd0d4c85fC70f007E0F56182 count
+reset && go build . && ./evmos-smart-contract deploy Counter --from mykey --keyring-backend test
+go build . && ./evmos-smart-contract query Counter 0xCdb87C8024258af1Dd0d4c85fC70f007E0F56182 count
 
 #--------------#
 
-reset && go build . && ./deploy-smart-contract deploy HelloWorld "Salam Gholi" --from mykey --keyring-backend test
-go build . && ./deploy-smart-contract query HelloWorld 0xe0112de09D54E3b5909A60C807BB60c973a20678 message
+reset && go build . && ./evmos-smart-contract deploy HelloWorld "Salam Gholi" --from mykey --keyring-backend test
+go build . && ./evmos-smart-contract query HelloWorld 0xe0112de09D54E3b5909A60C807BB60c973a20678 message
 
-go build . && ./deploy-smart-contract tx HelloWorld 0xe0112de09D54E3b5909A60C807BB60c973a20678 update "Salam Joojoo" --from mykey --keyring-backend test
+go build . && ./evmos-smart-contract tx HelloWorld 0xe0112de09D54E3b5909A60C807BB60c973a20678 update "Salam Joojoo" --from mykey --keyring-backend test
 
 #--------------#
 
-reset && go build . && ./deploy-smart-contract deploy Counter2 '{"params":[51, "Salam"]}' --from mykey --keyring-backend test
-./deploy-smart-contract query Counter2 0xCde07BcCbADffa2AdF4D0e2def65df3226A77513 count
-./deploy-smart-contract query Counter2 0xCde07BcCbADffa2AdF4D0e2def65df3226A77513 message
+reset && go build . && ./evmos-smart-contract deploy Counter2 '{"params":[51, "Salam"]}' --from mykey --keyring-backend test
+./evmos-smart-contract query Counter2 0xCde07BcCbADffa2AdF4D0e2def65df3226A77513 count
+./evmos-smart-contract query Counter2 0xCde07BcCbADffa2AdF4D0e2def65df3226A77513 message
 
-go build . && ./deploy-smart-contract tx Counter2 0xCde07BcCbADffa2AdF4D0e2def65df3226A77513 increment --from mykey --keyring-backend test
+go build . && ./evmos-smart-contract tx Counter2 0xCde07BcCbADffa2AdF4D0e2def65df3226A77513 increment --from mykey --keyring-backend test
 
 #--------------#
 

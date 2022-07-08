@@ -1,4 +1,4 @@
-module github.com/mojtaba-esk/deploy-smart-contract
+module github.com/mojtaba-esk/evmos-smart-contract
 
 go 1.18
 

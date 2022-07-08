@@ -10,7 +10,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/mojtaba-esk/deploy-smart-contract/contract"
+	"github.com/mojtaba-esk/evmos-smart-contract/contract"
 )
 
 var queryContractsCmd = &cobra.Command{

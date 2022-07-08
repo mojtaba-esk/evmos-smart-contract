@@ -13,7 +13,7 @@ import (
 	ethTypes "github.com/ethereum/go-ethereum/core/types"
 	ethCrypto "github.com/ethereum/go-ethereum/crypto"
 	"github.com/ethereum/go-ethereum/ethclient"
-	"github.com/mojtaba-esk/deploy-smart-contract/contract"
+	"github.com/mojtaba-esk/evmos-smart-contract/contract"
 
 	"github.com/spf13/cobra"
 )

@@ -6,7 +6,7 @@ import (
 
 	"github.com/cosmos/cosmos-sdk/client"
 	cosmosFlags "github.com/cosmos/cosmos-sdk/client/flags"
-	"github.com/mojtaba-esk/deploy-smart-contract/contract"
+	"github.com/mojtaba-esk/evmos-smart-contract/contract"
 
 	"github.com/spf13/cobra"
 )

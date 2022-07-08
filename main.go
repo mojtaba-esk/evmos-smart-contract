@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/mojtaba-esk/deploy-smart-contract/cmd"
+	"github.com/mojtaba-esk/evmos-smart-contract/cmd"
 )
 
 func main() {
