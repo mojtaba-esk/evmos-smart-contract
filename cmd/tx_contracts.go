@@ -45,6 +45,18 @@ var txContractsCmd = &cobra.Command{
 		}
 
 		fmt.Println("TX Hash: ", tx.Hash().Hex())
+		txJson, err := tx.MarshalJSON()
+		if err != nil {
+			return err
+		}
+
+		var prettyJSON bytes.Buffer
+		err = json.Indent(&prettyJSON, txJson, "", "  ")
+		if err != nil {
+			fmt.Printf("%s", txJson)
+		} else {
+			fmt.Printf("%s", prettyJSON.Bytes())
+		}
 
 		return nil
 	},
@@ -85,13 +97,17 @@ var transferContractsCmd = &cobra.Command{
 
 		fmt.Println("TX Hash: ", tx.Hash().Hex())
 		txJson, err := tx.MarshalJSON()
+		if err != nil {
+			return err
+		}
 
 		var prettyJSON bytes.Buffer
-		error := json.Indent(&prettyJSON, txJson, "", "  ")
-		if error != nil {
-			fmt.Printf("TX2 json err: %v\n", err)
+		err = json.Indent(&prettyJSON, txJson, "", "  ")
+		if err != nil {
+			fmt.Printf("%s", txJson)
+		} else {
+			fmt.Printf("%s", prettyJSON.Bytes())
 		}
-		fmt.Printf("\n\n====================\n\n%s", prettyJSON.Bytes())
 
 		return nil
 	},
