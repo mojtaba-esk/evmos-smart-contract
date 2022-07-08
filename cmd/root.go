@@ -26,7 +26,7 @@ const FlagCompiledContractsPath = "compiled-contracts-path"
 
 var rootCmd = &cobra.Command{
 	Use:   "evmos-smart-contract",
-	Short: "Deploy a smart contract to evmos",
+	Short: "Deploy and manage a smart contract on evmos",
 }
 
 func init() {

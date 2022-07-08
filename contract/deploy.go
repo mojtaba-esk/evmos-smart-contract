@@ -8,7 +8,6 @@ import (
 	"fmt"
 	"io/ioutil"
 	"math/big"
-	"reflect"
 	"strings"
 
 	"github.com/ethereum/go-ethereum/accounts/abi"
@@ -103,25 +102,9 @@ func Deploy(contractJsonFilePath string, privateKey *ecdsa.PrivateKey, nodeURI s
 
 	/*--------*/
 
-	var initParams map[string]interface{}
-	if err := json.Unmarshal([]byte(initParamsJson), &initParams); err != nil {
-		return common.Address{}, nil, nil, fmt.Errorf("unmarshaling InitParams failed: %v", err)
-	}
-
-	var paramsToPass []interface{}
-	// Let's range over it to let user to enter any name they want for params
-	for i := range initParams {
-		paramsToPass = initParams[i].([]interface{})
-		break
-	}
-
-	// Fix the numbers to make it compatible with int ptr
-	for i, v := range paramsToPass {
-		if reflect.TypeOf(v).Kind() == reflect.Float64 {
-			numParam := &big.Int{}
-			numParam.SetInt64(int64(v.(float64)))
-			paramsToPass[i] = numParam
-		}
+	paramsToPass, err := ParseJsonParams(initParamsJson)
+	if err != nil {
+		return common.Address{}, nil, nil, err
 	}
 
 	/*--------*/
