@@ -19,27 +19,17 @@ func init() {
 	rootCmd.AddCommand(ethermintKeys.Commands(defaultNodeHome))
 }
 
-// This function receives a keyName and retrieves its private key
+// This function receives a keyName with a cmd and retrieves its private key
 // Please note that this is designed for `ethsecp256k1` algorithm
-func getPrivateKey(cmd *cobra.Command, keyName string) (*ecdsa.PrivateKey, error) {
+func getPrivateKeyFromCmd(cmd *cobra.Command, keyName string) (*ecdsa.PrivateKey, error) {
 
 	inBuf := bufio.NewReader(cmd.InOrStdin())
 	keyringBackend, _ := cmd.Flags().GetString(cosmosFlags.FlagKeyringBackend)
 	keyringDir, _ := cmd.Flags().GetString(cosmosFlags.FlagKeyringDir)
 
-	kr, err := keyring.New(
-		AppName,
-		keyringBackend,
-		keyringDir,
-		inBuf,
-		evmoskr.Option(),
-	)
-	if err != nil {
-		return nil, err
-	}
-
 	decryptPassword := ""
 	conf := true
+	var err error
 
 	switch keyringBackend {
 	case keyring.BackendFile:
@@ -55,7 +45,31 @@ func getPrivateKey(cmd *cobra.Command, keyName string) (*ecdsa.PrivateKey, error
 		return nil, err
 	}
 
-	// Exports private key from keybase using password
+	return GetPrivateKey(keyName, keyringBackend, keyringDir, decryptPassword, AppName, bufio.NewReader(cmd.InOrStdin()))
+}
+
+// This function receives keyName, keyringBackend, keyringDir, decryptPassword, appName
+// and provides the private key
+func GetPrivateKey(keyName, keyringBackend, keyringDir, decryptPassword, appName string, inBuf *bufio.Reader) (*ecdsa.PrivateKey, error) {
+
+	keyringDir = "/home/moji/.evmosd"
+	keyringBackend = "test"
+	keyName = "mykey"
+	decryptPassword = ""
+	appName = "evmosd"
+	inBuf = nil
+
+	kr, err := keyring.New(
+		appName,
+		keyringBackend,
+		keyringDir,
+		inBuf,
+		evmoskr.Option(),
+	)
+	if err != nil {
+		return nil, err
+	}
+
 	armor, err := kr.ExportPrivKeyArmor(keyName, decryptPassword)
 	if err != nil {
 		return nil, err

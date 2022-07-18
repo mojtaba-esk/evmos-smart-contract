@@ -27,13 +27,13 @@ const (
 // Example: {"params":[51, "test msg"]}
 func ParseJsonParams(paramsJson string) ([]interface{}, error) {
 
+	if paramsJson == "" {
+		return []interface{}{}, nil
+	}
+
 	var params map[string]interface{}
 	if err := json.Unmarshal([]byte(paramsJson), &params); err != nil {
 		return nil, fmt.Errorf("unmarshaling params failed: %v", err)
-	}
-
-	if len(params) == 0 {
-		return nil, fmt.Errorf("unmarshaling params: empty parameters list")
 	}
 
 	var paramsToPass []interface{}

@@ -29,7 +29,7 @@ var deployContractsCmd = &cobra.Command{
 		}
 
 		keyName := clientCtx.GetFromName()
-		privateKey, err := getPrivateKey(cmd, keyName)
+		privateKey, err := getPrivateKeyFromCmd(cmd, keyName)
 		if err != nil {
 			return err
 		}
