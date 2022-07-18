@@ -13,7 +13,14 @@ command -v jq > /dev/null 2>&1 || { echo >&2 "jq not installed. More info: https
 
 # Reinstall daemon
 rm -rf ~/.evmosd*
-make install
+
+if [ $(which evmosd) == "" ];then 
+  git clone https://github.com/evmos/evmos.git
+  cd evmos
+  make install
+  cd ..
+  rm -rf evmos
+fi
 
 # Set client config
 evmosd config keyring-backend $KEYRING

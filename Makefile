@@ -2,6 +2,7 @@
 
 BINDIR ?= $(GOPATH)/bin
 BUILDDIR ?= $(CURDIR)/build
+# SHELL := /bin/bash
 
 export GO111MODULE = on
 
@@ -125,7 +126,7 @@ godocs:
 	godoc -http=:6060
 
 ###############################################################################
-###                           Tests & Simulation                            ###
+###                                   Tests                                 ###
 ###############################################################################
 
 test: test-unit
@@ -154,70 +155,16 @@ else
 	go test -mod=readonly $(ARGS)  $(EXTRA_ARGS) $(TEST_PACKAGES)
 endif
 
-test-import:
-	@go test ./tests/importer -v --vet=off --run=TestImportBlocks --datadir tmp \
-	--blockchain blockchain
-	rm -rf tests/importer/tmp
+start-node:
+	./scripts/start-evmos-local-node.sh
 
-test-rpc:
-	./scripts/integration-test-all.sh -t "rpc" -q 1 -z 1 -s 2 -m "rpc" -r "true"
+stop-node:
+	pkill evmosd
+	rm -rf /tmp/evmos-*
 
-test-rpc-pending:
-	./scripts/integration-test-all.sh -t "pending" -q 1 -z 1 -s 2 -m "pending" -r "true"
+integration-test: start-node run-tests stop-node
 
-.PHONY: run-tests test test-all test-import test-rpc $(TEST_TARGETS)
-
-test-sim-nondeterminism:
-	@echo "Running non-determinism test..."
-	@go test -mod=readonly $(SIMAPP) -run TestAppStateDeterminism -Enabled=true \
-		-NumBlocks=100 -BlockSize=200 -Commit=true -Period=0 -v -timeout 24h
-
-test-sim-custom-genesis-fast:
-	@echo "Running custom genesis simulation..."
-	@echo "By default, ${HOME}/.$(EVMOS_DIR)/config/genesis.json will be used."
-	@go test -mod=readonly $(SIMAPP) -run TestFullAppSimulation -Genesis=${HOME}/.$(EVMOS_DIR)/config/genesis.json \
-		-Enabled=true -NumBlocks=100 -BlockSize=200 -Commit=true -Seed=99 -Period=5 -v -timeout 24h
-
-test-sim-import-export: runsim
-	@echo "Running application import/export simulation. This may take several minutes..."
-	@$(BINDIR)/runsim -Jobs=4 -SimAppPkg=$(SIMAPP) -ExitOnFail 50 5 TestAppImportExport
-
-test-sim-after-import: runsim
-	@echo "Running application simulation-after-import. This may take several minutes..."
-	@$(BINDIR)/runsim -Jobs=4 -SimAppPkg=$(SIMAPP) -ExitOnFail 50 5 TestAppSimulationAfterImport
-
-test-sim-custom-genesis-multi-seed: runsim
-	@echo "Running multi-seed custom genesis simulation..."
-	@echo "By default, ${HOME}/.$(EVMOS_DIR)/config/genesis.json will be used."
-	@$(BINDIR)/runsim -Genesis=${HOME}/.$(EVMOS_DIR)/config/genesis.json -SimAppPkg=$(SIMAPP) -ExitOnFail 400 5 TestFullAppSimulation
-
-test-sim-multi-seed-long: runsim
-	@echo "Running long multi-seed application simulation. This may take awhile!"
-	@$(BINDIR)/runsim -Jobs=4 -SimAppPkg=$(SIMAPP) -ExitOnFail 500 50 TestFullAppSimulation
-
-test-sim-multi-seed-short: runsim
-	@echo "Running short multi-seed application simulation. This may take awhile!"
-	@$(BINDIR)/runsim -Jobs=4 -SimAppPkg=$(SIMAPP) -ExitOnFail 50 10 TestFullAppSimulation
-
-test-sim-benchmark-invariants:
-	@echo "Running simulation invariant benchmarks..."
-	@go test -mod=readonly $(SIMAPP) -benchmem -bench=BenchmarkInvariants -run=^$ \
-	-Enabled=true -NumBlocks=1000 -BlockSize=200 \
-	-Period=1 -Commit=true -Seed=57 -v -timeout 24h
-
-.PHONY: \
-test-sim-nondeterminism \
-test-sim-custom-genesis-fast \
-test-sim-import-export \
-test-sim-after-import \
-test-sim-custom-genesis-multi-seed \
-test-sim-multi-seed-short \
-test-sim-multi-seed-long \
-test-sim-benchmark-invariants
-
-benchmark:
-	@go test -mod=readonly -bench=. $(PACKAGES_NOSIMULATION)
-.PHONY: benchmark
+.PHONY: run-tests test test-all test-import test-rpc start-node stop-node integration-test $(TEST_TARGETS)
 
 ###############################################################################
 ###                                Linting                                  ###
