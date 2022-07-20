@@ -10,6 +10,8 @@ import (
 
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/version"
+
+	// evmosapp "github.com/evmos/evmos/v6/app"
 	evmoscfg "github.com/evmos/evmos/v6/cmd/config"
 	"github.com/mojtaba-esk/evmos-smart-contract/cmd"
 )
@@ -39,10 +41,12 @@ func init() {
 	evmoscfg.SetBech32Prefixes(config)
 	version.Name = cmd.AppName
 	config.Seal()
+
+	cmd.Execute() // We need it here to have the codecs configured properly for tests as well
 }
 
-// Disabling logs
 func TestMain(m *testing.M) {
+	// Disabling logs
 	log.SetOutput(ioutil.Discard)
 
 	os.Exit(m.Run())

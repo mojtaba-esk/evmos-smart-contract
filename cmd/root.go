@@ -41,16 +41,10 @@ func init() {
 }
 
 func Execute() {
-	encodingConfig := encoding.MakeConfig(nil)
-	initClientCtx := client.Context{}.
-		WithInput(os.Stdin).
-		WithHomeDir(defaultNodeHome).
-		WithKeyringOptions(evmoskr.Option()).
-		WithViper(EnvPrefix).
-		WithLegacyAmino(encodingConfig.Amino)
 
+	clientContext := GetClientContext()
 	ctx := context.Background()
-	ctx = context.WithValue(ctx, client.ClientContextKey, &initClientCtx)
+	ctx = context.WithValue(ctx, client.ClientContextKey, &clientContext)
 	if err := rootCmd.ExecuteContext(ctx); err != nil {
 		_, _ = fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
@@ -64,4 +58,14 @@ func GetRootPath() string {
 		panic(err)
 	}
 	return dir
+}
+
+func GetClientContext() client.Context {
+	encodingConfig := encoding.MakeConfig(nil)
+	return client.Context{}.
+		WithInput(os.Stdin).
+		WithHomeDir(defaultNodeHome).
+		WithKeyringOptions(evmoskr.Option()).
+		WithViper(EnvPrefix).
+		WithLegacyAmino(encodingConfig.Amino)
 }
