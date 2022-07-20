@@ -1,9 +1,9 @@
 package contract_test
 
 import (
-	"fmt"
 	"testing"
 
+	"github.com/cosmos/cosmos-sdk/crypto/keyring"
 	"github.com/mojtaba-esk/evmos-smart-contract/cmd"
 	"github.com/mojtaba-esk/evmos-smart-contract/contract"
 )
@@ -13,24 +13,63 @@ func TestDeploy(t *testing.T) {
 	tt := []struct {
 		name         string
 		contractName string
+		deployParams string
 		wantErr      bool
-		wantOutput   string
 	}{
+		{
+			name:         "Contract with empty code",
+			contractName: "NoneExistingContract",
+			deployParams: ``,
+			wantErr:      true,
+		},
 		{
 			name:         "Contract without parameters",
 			contractName: "Counter1",
+			deployParams: ``,
 			wantErr:      false,
-			wantOutput:   "",
+		},
+		{
+			name:         "Contract with a string parameter",
+			contractName: "HelloWorld",
+			deployParams: `{"params":["Ciao message"]}`,
+			wantErr:      false,
+		},
+		{
+			name:         "Contract with missing params",
+			contractName: "HelloWorld",
+			deployParams: ``,
+			wantErr:      true,
+		},
+		{
+			name:         "Contract with two parameters int and string",
+			contractName: "Counter2",
+			deployParams: `{"params":[51, "Test message"]}`,
+			wantErr:      false,
+		},
+		{
+			name:         "Contract with mismatch parameter types",
+			contractName: "Counter2",
+			deployParams: `{"params":["text", 51]}`,
+			wantErr:      true,
+		},
+		{
+			name:         "Contract with missing only one parameter",
+			contractName: "Counter2",
+			deployParams: `{"params":[51]}`,
+			wantErr:      true,
+		},
+		{
+			name:         "ERC20 Contract",
+			contractName: "MyTestToken",
+			deployParams: ``,
+			wantErr:      false,
 		},
 	}
 
-	TestDataDir = "/home/moji/.evmosd"
-	privateKey, err := cmd.GetPrivateKey(TestKey, "test", TestDataDir, "", cmd.AppName, nil)
+	privateKey, err := cmd.ExportPrivateKey(TestKey, keyring.BackendTest, TestDataDir, "", cmd.AppName, nil)
 	if err != nil {
-		t.Errorf("Cannot get the private key: %v", err)
-		return
+		t.Fatalf("Cannot get the private key: %v", err)
 	}
-	fmt.Printf("privateKey: %v\n", privateKey)
 
 	for _, tc := range tt {
 
@@ -38,21 +77,23 @@ func TestDeploy(t *testing.T) {
 
 			jsonFilePath, err := GetContractJsonFilePath(tc.contractName)
 			if err != nil {
-				t.Errorf("Error getting contract json file path: %v", err)
+				t.Fatalf("Error getting contract json file path: %v", err)
 			}
 
-			address, tx, _, err := contract.Deploy(jsonFilePath, privateKey, TestNodeURI, "")
-			fmt.Println("Contract Address: ", address.Hex())
-			fmt.Println("TX Hash: ", tx.Hash().Hex())
+			address, tx, _, err := contract.Deploy(jsonFilePath, privateKey, TestNodeURI, tc.deployParams)
 
 			if (err != nil) != tc.wantErr {
-				t.Errorf("Deploy() error = %v, wantErr %v", err, tc.wantErr)
-				return
+				t.Fatalf("contract.Deploy() error = %v, wantErr %v", err, tc.wantErr)
 			}
 
-			// if !reflect.DeepEqual(gotOutput, tc.wantOutput) {
-			// 	t.Errorf("Deploy() = %v, want %v", gotOutput, tc.wantOutput)
-			// }
+			if err == nil {
+				if address.Bytes() == nil || address.Hex() == "" {
+					t.Fatalf("contract.Deploy() error = Got empty address")
+				}
+				if tx == nil || tx.Hash().Hex() == "" {
+					t.Fatalf("contract.Deploy() error = Got empty tx")
+				}
+			}
 		})
 	}
 }

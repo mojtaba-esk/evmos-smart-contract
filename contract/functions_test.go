@@ -86,12 +86,11 @@ func TestParseJsonParams(t *testing.T) {
 			gotOutput, err := contract.ParseJsonParams(tc.input)
 
 			if (err != nil) != tc.wantErr {
-				t.Errorf("ParseJsonParams() error = %v, wantErr %v", err, tc.wantErr)
-				return
+				t.Fatalf("ParseJsonParams() error = %v, wantErr %v", err, tc.wantErr)
 			}
 
 			if !reflect.DeepEqual(gotOutput, tc.wantOutput) {
-				t.Errorf("ParseJsonParams() = %v, want %v", gotOutput, tc.wantOutput)
+				t.Fatalf("ParseJsonParams() = %v, want %v", gotOutput, tc.wantOutput)
 			}
 		})
 	}
