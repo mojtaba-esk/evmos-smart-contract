@@ -45,19 +45,12 @@ func getPrivateKeyFromCmd(cmd *cobra.Command, keyName string) (*ecdsa.PrivateKey
 		return nil, err
 	}
 
-	return GetPrivateKey(keyName, keyringBackend, keyringDir, decryptPassword, AppName, bufio.NewReader(cmd.InOrStdin()))
+	return ExportPrivateKey(keyName, keyringBackend, keyringDir, decryptPassword, AppName, bufio.NewReader(cmd.InOrStdin()))
 }
 
 // This function receives keyName, keyringBackend, keyringDir, decryptPassword, appName
 // and provides the private key
-func GetPrivateKey(keyName, keyringBackend, keyringDir, decryptPassword, appName string, inBuf *bufio.Reader) (*ecdsa.PrivateKey, error) {
-
-	keyringDir = "/home/moji/.evmosd"
-	keyringBackend = "test"
-	keyName = "mykey"
-	decryptPassword = ""
-	appName = "evmosd"
-	inBuf = nil
+func ExportPrivateKey(keyName, keyringBackend, keyringDir, decryptPassword, appName string, inBuf *bufio.Reader) (*ecdsa.PrivateKey, error) {
 
 	kr, err := keyring.New(
 		appName,
