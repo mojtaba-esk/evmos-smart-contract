@@ -156,6 +156,7 @@ else
 endif
 
 start-node:
+#	go clean -testcache
 	./scripts/start-evmos-local-node.sh
 
 stop-node:

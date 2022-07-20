@@ -109,10 +109,15 @@ start_func() {
     echo "started evmos node, pid=${EVMOS_PID}"
 }
 
+# Since tx s fail due to this error: max fee per gas less than block base fee (1000000 < 1105735)
+# and waiting to reach to x blockheight seems to resovle it, let's keep waiting until then
 wait_func() {
-    echo "waiting for evmos node to start ..."
+    echo "waiting for evmos to get ready..."
     while true; do
-        if [[ $(curl -s http://localhost:26657/status 2>&1 | jq -r ".result") != "" ]]; then
+        # LATEST_BLOCK_HEIGHT=$(curl -s http://localhost:26657/status 2>&1 | jq -r ".result.sync_info.latest_block_height")
+        LATEST_BLOCK_HEIGHT=$(curl -s http://localhost:26657/status | jq -r ".result.sync_info.latest_block_height")
+        printf "\rHeight: %s" "$LATEST_BLOCK_HEIGHT"
+        if ((LATEST_BLOCK_HEIGHT>50)); then
             echo "evmos node started"
             break
         fi
@@ -122,8 +127,10 @@ wait_func() {
 
 #---- Main ----#
 
+
 init_func
 start_func
+sleep 2
 wait_func
 
 echo ${DATA_DIR} > "/tmp/evmos-test-data-dir"
