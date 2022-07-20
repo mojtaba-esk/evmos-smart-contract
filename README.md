@@ -242,3 +242,13 @@ evmos-smart-contract  balance MyTestToken 0xe97faB40A966BF149B0926008AbA2aB854b1
 Amount: 10.000000000000000000
 Denom: MTT
 ```
+
+## Test
+To run integration test use the following command:
+```sh
+make integration-test
+```
+It runs a local evmos node itself and performs the tests.
+
+## Code docs
+https://pkg.go.dev/github.com/mojtaba-esk/evmos-smart-contract
