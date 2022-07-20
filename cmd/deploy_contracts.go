@@ -29,6 +29,9 @@ var deployContractsCmd = &cobra.Command{
 		}
 
 		keyName := clientCtx.GetFromName()
+		if keyName == "" {
+			return fmt.Errorf("no key name provided in `--from`")
+		}
 		privateKey, err := getPrivateKeyFromCmd(cmd, keyName)
 		if err != nil {
 			return err
