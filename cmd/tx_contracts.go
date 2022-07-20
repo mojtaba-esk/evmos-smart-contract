@@ -87,7 +87,6 @@ var transferContractsCmd = &cobra.Command{
 		if err != nil {
 			return err
 		}
-		// big.
 		amount := big.NewInt(amountUint)
 
 		tx, err := contract.Transfer(contractJsonFilePath, contractAddress, privateKey, toAddress, amount, clientCtx.NodeURI)
