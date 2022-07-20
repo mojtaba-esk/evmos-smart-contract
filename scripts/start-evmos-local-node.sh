@@ -114,8 +114,7 @@ start_func() {
 wait_func() {
     echo "waiting for evmos to get ready..."
     while true; do
-        # LATEST_BLOCK_HEIGHT=$(curl -s http://localhost:26657/status 2>&1 | jq -r ".result.sync_info.latest_block_height")
-        LATEST_BLOCK_HEIGHT=$(curl -s http://localhost:26657/status | jq -r ".result.sync_info.latest_block_height")
+        LATEST_BLOCK_HEIGHT=$(curl -s http://localhost:26657/status 2>&1 | jq -r ".result.sync_info.latest_block_height")
         printf "\rHeight: %s" "$LATEST_BLOCK_HEIGHT"
         if ((LATEST_BLOCK_HEIGHT>50)); then
             echo "evmos node started"
