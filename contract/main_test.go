@@ -12,9 +12,8 @@ import (
 	"github.com/cosmos/cosmos-sdk/crypto/keyring"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/version"
-	"github.com/cosmos/go-bip39"
+	bip39 "github.com/cosmos/go-bip39"
 
-	// evmosapp "github.com/evmos/evmos/v6/app"
 	etherminthd "github.com/evmos/ethermint/crypto/hd"
 	evmoscfg "github.com/evmos/evmos/v6/cmd/config"
 	"github.com/mojtaba-esk/evmos-smart-contract/cmd"
