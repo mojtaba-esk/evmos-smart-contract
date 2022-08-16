@@ -19,29 +19,6 @@ import (
 	ethCrypto "github.com/ethereum/go-ethereum/crypto"
 )
 
-// This function receives the path of a compiled contract in JSON format
-// Retrieve the data from the JSON file and binds it in a metadata variable
-// To get prepared for deployment
-func bindMetaData(contractJsonFilePath string) (*bind.MetaData, error) {
-
-	bytes, err := ioutil.ReadFile(contractJsonFilePath)
-	if err != nil {
-		return nil, err
-	}
-
-	var contract CompiledContract
-
-	err = json.Unmarshal(bytes, &contract)
-	if err != nil {
-		return nil, err
-	}
-
-	return &bind.MetaData{
-		ABI: contract.ABI,
-		Bin: contract.Bin,
-	}, nil
-}
-
 // This function deploys an Ethereum contract
 // it receives the path to the compiled contract in JSON, a private key
 // and a nodeURI then it deploys the smart contract to the chain via the given evmos node
@@ -124,4 +101,27 @@ func Instance(contractJsonFilePath string, address common.Address, backend bind.
 		return nil, err
 	}
 	return bind.NewBoundContract(address, parsed, backend, backend, backend), nil
+}
+
+// This function receives the path of a compiled contract in JSON format
+// Retrieve the data from the JSON file and binds it in a metadata variable
+// To get prepared for deployment
+func bindMetaData(contractJsonFilePath string) (*bind.MetaData, error) {
+
+	bytes, err := ioutil.ReadFile(contractJsonFilePath)
+	if err != nil {
+		return nil, err
+	}
+
+	var contract CompiledContract
+
+	err = json.Unmarshal(bytes, &contract)
+	if err != nil {
+		return nil, err
+	}
+
+	return &bind.MetaData{
+		ABI: contract.ABI,
+		Bin: contract.Bin,
+	}, nil
 }

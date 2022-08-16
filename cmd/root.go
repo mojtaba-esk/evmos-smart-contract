@@ -18,26 +18,28 @@ import (
 	"github.com/evmos/ethermint/encoding"
 )
 
-var defaultNodeHome = os.ExpandEnv("$HOME/") + ".evmosd"
+var _defaultNodeHome = os.ExpandEnv("$HOME/") + ".evmosd"
 
-const EnvPrefix = "EVMOS"
-const AppName = "evmosd"
-const FlagCompiledContractsPath = "compiled-contracts-path"
+const (
+	EnvPrefix                 = "EVMOS"
+	AppName                   = "evmosd"
+	FlagCompiledContractsPath = "compiled-contracts-path"
+)
 
-var rootCmd = &cobra.Command{
+var _rootCmd = &cobra.Command{
 	Use:   "evmos-smart-contract",
 	Short: "Deploy and manage a smart contract on evmos",
 }
 
 func init() {
 
-	rootCmd.PersistentFlags().String(cosmosFlags.FlagKeyringBackend, "os", "Keyring backend to use, default value is: os")
-	rootCmd.PersistentFlags().String(cosmosFlags.FlagKeyringDir, defaultNodeHome, "Keyring backend directory")
-	rootCmd.PersistentFlags().String(cli.OutputFlag, "text", "Output format (text|json)")
-	rootCmd.PersistentFlags().String(cosmosFlags.FlagKeyAlgorithm, string(hd.EthSecp256k1Type), "The algorithm used to generate the keys")
-	rootCmd.PersistentFlags().String(cosmosFlags.FlagNode, "http://localhost:8545", "The evmos node to connect to")
-	rootCmd.PersistentFlags().String(cosmosFlags.FlagChainID, "evmos_9000-1", "The evmos chain id")
-	rootCmd.PersistentFlags().String(FlagCompiledContractsPath, filepath.Join(GetRootPath(), "contracts", "compiled_contracts"), "The path to the compiled contracts in json format")
+	_rootCmd.PersistentFlags().String(cosmosFlags.FlagKeyringBackend, "os", "Keyring backend to use, default value is: os")
+	_rootCmd.PersistentFlags().String(cosmosFlags.FlagKeyringDir, _defaultNodeHome, "Keyring backend directory")
+	_rootCmd.PersistentFlags().String(cli.OutputFlag, "text", "Output format (text|json)")
+	_rootCmd.PersistentFlags().String(cosmosFlags.FlagKeyAlgorithm, string(hd.EthSecp256k1Type), "The algorithm used to generate the keys")
+	_rootCmd.PersistentFlags().String(cosmosFlags.FlagNode, "http://localhost:8545", "The evmos node to connect to")
+	_rootCmd.PersistentFlags().String(cosmosFlags.FlagChainID, "evmos_9000-1", "The evmos chain id")
+	_rootCmd.PersistentFlags().String(FlagCompiledContractsPath, filepath.Join(GetRootPath(), "contracts", "compiled_contracts"), "The path to the compiled contracts in json format")
 }
 
 func Execute() {
@@ -45,7 +47,7 @@ func Execute() {
 	clientContext := GetClientContext()
 	ctx := context.Background()
 	ctx = context.WithValue(ctx, client.ClientContextKey, &clientContext)
-	if err := rootCmd.ExecuteContext(ctx); err != nil {
+	if err := _rootCmd.ExecuteContext(ctx); err != nil {
 		_, _ = fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
 	}
@@ -64,7 +66,7 @@ func GetClientContext() client.Context {
 	encodingConfig := encoding.MakeConfig(nil)
 	return client.Context{}.
 		WithInput(os.Stdin).
-		WithHomeDir(defaultNodeHome).
+		WithHomeDir(_defaultNodeHome).
 		WithKeyringOptions(evmoskr.Option()).
 		WithViper(EnvPrefix).
 		WithLegacyAmino(encodingConfig.Amino)

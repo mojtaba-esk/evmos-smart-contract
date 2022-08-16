@@ -64,6 +64,6 @@ var balanceContractsCmd = &cobra.Command{
 }
 
 func init() {
-	rootCmd.AddCommand(queryContractsCmd)
-	rootCmd.AddCommand(balanceContractsCmd)
+	_rootCmd.AddCommand(queryContractsCmd)
+	_rootCmd.AddCommand(balanceContractsCmd)
 }

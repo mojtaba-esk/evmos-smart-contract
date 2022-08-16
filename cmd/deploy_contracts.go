@@ -12,7 +12,7 @@ import (
 )
 
 func init() {
-	rootCmd.AddCommand(deployContractsCmd)
+	_rootCmd.AddCommand(deployContractsCmd)
 	deployContractsCmd.Flags().String(cosmosFlags.FlagFrom, "", "account address to sign the deployment tx")
 }
 

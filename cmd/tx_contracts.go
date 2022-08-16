@@ -114,8 +114,8 @@ var transferContractsCmd = &cobra.Command{
 
 func init() {
 
-	rootCmd.AddCommand(txContractsCmd)
-	rootCmd.AddCommand(transferContractsCmd)
+	_rootCmd.AddCommand(txContractsCmd)
+	_rootCmd.AddCommand(transferContractsCmd)
 
 	txContractsCmd.Flags().String(cosmosFlags.FlagFrom, "", "account address to sign the tx")
 	transferContractsCmd.Flags().String(cosmosFlags.FlagFrom, "", "account address to sends funds from")

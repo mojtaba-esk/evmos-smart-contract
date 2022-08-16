@@ -16,7 +16,7 @@ import (
 )
 
 func init() {
-	rootCmd.AddCommand(ethermintKeys.Commands(defaultNodeHome))
+	_rootCmd.AddCommand(ethermintKeys.Commands(_defaultNodeHome))
 }
 
 // This function receives a keyName with a cmd and retrieves its private key

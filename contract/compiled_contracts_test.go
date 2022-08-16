@@ -4,7 +4,7 @@ import (
 	"io/ioutil"
 )
 
-var compiledContractsJson = map[string]string{
+var _compiledContractsJson = map[string]string{
 	"Counter1": `{
 		"abi": "[{\"inputs\":[],\"name\":\"count\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"increment\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}]",
 		"bin": "6080604052600160005534801561001557600080fd5b50610173806100256000396000f3fe608060405234801561001057600080fd5b50600436106100365760003560e01c806306661abd1461003b578063d09de08a14610059575b600080fd5b610043610063565b604051610050919061009d565b60405180910390f35b610061610069565b005b60005481565b600160008082825461007b91906100e7565b92505081905550565b6000819050919050565b61009781610084565b82525050565b60006020820190506100b2600083018461008e565b92915050565b7f4e487b7100000000000000000000000000000000000000000000000000000000600052601160045260246000fd5b60006100f282610084565b91506100fd83610084565b9250827fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff03821115610132576101316100b8565b5b82820190509291505056fea2646970667358221220fc4389ee12d6a47e2156c1633e481ef83c9a2f38e942a4b5d166499497afbd9564736f6c634300080f0033",
@@ -34,7 +34,7 @@ func GetContractJsonFilePath(contractName string) (string, error) {
 	}
 	defer f.Close()
 
-	_, err = f.Write([]byte(compiledContractsJson[contractName]))
+	_, err = f.Write([]byte(_compiledContractsJson[contractName]))
 	if err != nil {
 		return "", err
 	}
