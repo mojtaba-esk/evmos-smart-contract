@@ -33,13 +33,16 @@ func ParseJsonParams(paramsJson string) ([]interface{}, error) {
 
 	var params map[string]interface{}
 	if err := json.Unmarshal([]byte(paramsJson), &params); err != nil {
-		return nil, fmt.Errorf("unmarshaling params failed: %v", err)
+		return nil, fmt.Errorf("unmarshaling json params: %v", err)
 	}
 
 	var paramsToPass []interface{}
 	// Let's range over it to let user to enter any key name they want for params
 	for i := range params {
-		paramsToPass = params[i].([]interface{})
+		var ok bool
+		if paramsToPass, ok = params[i].([]interface{}); !ok {
+			return nil, fmt.Errorf("casting params: %v", params[i])
+		}
 		break
 	}
 
@@ -47,7 +50,11 @@ func ParseJsonParams(paramsJson string) ([]interface{}, error) {
 	for i, v := range paramsToPass {
 		if reflect.TypeOf(v).Kind() == reflect.Float64 {
 			numParam := &big.Int{}
-			numParam.SetInt64(int64(v.(float64)))
+			floatVal, ok := v.(float64)
+			if !ok {
+				return nil, fmt.Errorf("casting numeric param: %v", v)
+			}
+			numParam.SetInt64(int64(floatVal))
 			paramsToPass[i] = numParam
 		}
 	}

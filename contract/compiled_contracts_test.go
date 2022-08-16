@@ -34,6 +34,9 @@ func GetContractJsonFilePath(contractName string) (string, error) {
 	}
 	defer f.Close()
 
-	f.Write([]byte(compiledContractsJson[contractName]))
+	_, err = f.Write([]byte(compiledContractsJson[contractName]))
+	if err != nil {
+		return "", err
+	}
 	return f.Name(), nil
 }
