@@ -28,7 +28,7 @@ const (
 func ParseJsonParams(paramsJson string) ([]interface{}, error) {
 
 	if paramsJson == "" {
-		return []interface{}{}, nil
+		return nil, nil
 	}
 
 	var params map[string]interface{}
