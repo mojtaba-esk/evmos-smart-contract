@@ -2,10 +2,11 @@ package contract_test
 
 import (
 	"math/big"
-	"reflect"
 	"testing"
 
 	"github.com/mojtaba-esk/evmos-smart-contract/contract"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func TestParseJsonParams(t *testing.T) {
@@ -20,7 +21,7 @@ func TestParseJsonParams(t *testing.T) {
 			name:       "Empty input",
 			input:      "",
 			wantErr:    false,
-			wantOutput: []interface{}{},
+			wantOutput: nil,
 		},
 		{
 			name:       "Empty parameters",
@@ -85,13 +86,10 @@ func TestParseJsonParams(t *testing.T) {
 
 			gotOutput, err := contract.ParseJsonParams(tc.input)
 
-			if (err != nil) != tc.wantErr {
-				t.Fatalf("ParseJsonParams() error = %v, wantErr %v", err, tc.wantErr)
+			if !tc.wantErr {
+				require.NoError(t, err)
 			}
-
-			if !reflect.DeepEqual(gotOutput, tc.wantOutput) {
-				t.Fatalf("ParseJsonParams() = %v, want %v", gotOutput, tc.wantOutput)
-			}
+			assert.Equal(t, tc.wantOutput, gotOutput)
 		})
 	}
 }

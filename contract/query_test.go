@@ -11,6 +11,7 @@ import (
 	"github.com/evmos/ethermint/crypto/ethsecp256k1"
 	"github.com/mojtaba-esk/evmos-smart-contract/cmd"
 	"github.com/mojtaba-esk/evmos-smart-contract/contract"
+	"github.com/stretchr/testify/require"
 )
 
 func TestSimpleQuery(t *testing.T) {
@@ -107,8 +108,8 @@ func TestSimpleQuery(t *testing.T) {
 			time.Sleep(1 * time.Second)
 
 			gotOutput, err := contract.SimpleQuery(jsonFilePath, address.Hex(), TestNodeURI, tc.queryMethod, tc.queryParams)
-			if (err != nil) != tc.wantErr {
-				t.Fatalf("contract.SimpleQuery() error = %v, wantErr %v", err, tc.wantErr)
+			if !tc.wantErr {
+				require.NoError(t, err)
 			}
 
 			if !tc.evaluateOutput(gotOutput, tc.wantOutput) {

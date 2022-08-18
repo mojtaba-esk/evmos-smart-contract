@@ -6,6 +6,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/crypto/keyring"
 	"github.com/mojtaba-esk/evmos-smart-contract/cmd"
 	"github.com/mojtaba-esk/evmos-smart-contract/contract"
+	"github.com/stretchr/testify/require"
 )
 
 func TestDeploy(t *testing.T) {
@@ -82,8 +83,8 @@ func TestDeploy(t *testing.T) {
 
 			address, tx, _, err := contract.Deploy(jsonFilePath, privateKey, TestNodeURI, tc.deployParams)
 
-			if (err != nil) != tc.wantErr {
-				t.Fatalf("contract.Deploy() error = %v, wantErr %v", err, tc.wantErr)
+			if !tc.wantErr {
+				require.NoError(t, err)
 			}
 
 			if err == nil {

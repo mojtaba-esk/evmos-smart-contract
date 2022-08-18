@@ -11,6 +11,7 @@ import (
 	"github.com/evmos/ethermint/crypto/ethsecp256k1"
 	"github.com/mojtaba-esk/evmos-smart-contract/cmd"
 	"github.com/mojtaba-esk/evmos-smart-contract/contract"
+	"github.com/stretchr/testify/require"
 )
 
 func TestSimpleTx(t *testing.T) {
@@ -173,8 +174,8 @@ func TestTransfer(t *testing.T) {
 			time.Sleep(1 * time.Second)
 
 			gotOutput, err := contract.QueryBalance(jsonFilePath, address.Hex(), tc.accountAddress, TestNodeURI)
-			if (err != nil) != tc.wantErr {
-				t.Fatalf("contract.QueryBalance() error = %v, wantErr %v", err, tc.wantErr)
+			if !tc.wantErr {
+				require.NoError(t, err)
 			}
 
 			if !gotOutput.Equal(tc.wantOutput) {
