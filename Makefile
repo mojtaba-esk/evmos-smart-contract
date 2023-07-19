@@ -57,7 +57,7 @@ endif
 
 ifeq (, $(shell which go-bindata))
 	@echo "Installing go-bindata..."
-	@go install github.com/kevinburke/go-bindata/go-bindata@latest
+	@go install github.com/kevinburke/go-bindata/v4/go-bindata@latest
 else
 	@echo "go-bindata already installed; skipping..."
 endif
@@ -71,7 +71,7 @@ endif
 
 ifeq (, $(shell which protoc-gen-go))
 	@echo "Installing protoc-gen-go..."
-	@go install github.com/fjl/gencodeclatest
+	@go install github.com/fjl/gencodec@latest
 	@go install google.golang.org/protobuf/cmd/protoc-gen-go@latest
 else
 	@echo "protoc-gen-go already installed; skipping..."
@@ -99,7 +99,7 @@ endif
 
 ifeq (, $(shell which solc))
 	@echo "Installing solc..."
-	@snap install solc
+	@sudo snap install solc
 else
 	@echo "solc already installed; skipping..."
 endif
